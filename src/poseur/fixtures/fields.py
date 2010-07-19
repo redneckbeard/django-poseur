@@ -143,9 +143,9 @@ class FloatField(FakeField):
 
 class IntegerField(FakeField):
     def get_random_value(self, lower=None, upper=None):
-        if not lower:
+        if lower is None:
             lower = -1000
-        if not upper:
+        if upper is None:
             upper = 1000
         return random.randint(lower, upper)
 
@@ -169,7 +169,7 @@ class NullBooleanField(FakeField):
 
 class PositiveIntegerField(IntegerField):
     def get_random_value(self, lower=None, upper=None):
-        if not lower or lower < 0:
+        if lower is None or lower < 0:
             lower = 0
         return super(PositiveIntegerField, self).get_random_value(lower, upper)
 
@@ -183,7 +183,7 @@ class PositiveSmallIntegerField(PositiveIntegerField):
 
 class SlugField(FakeField):
     def get_random_value(self, lower=None, upper=None):
-        return slugify(lorem.words())[:self.field_instance.max_length]
+        return slugify(lorem.sentence())[:self.field_instance.max_length]
 
 
 class SmallIntegerField(IntegerField):
