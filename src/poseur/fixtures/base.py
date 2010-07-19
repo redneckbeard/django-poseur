@@ -48,7 +48,7 @@ class BaseFakeModel(object):
         print "%d instance%s of `%s' generated." % (
             count,
             '' if count == 1 else 's',
-            cls._meta.model.__class__.__name__
+            cls._meta.model._meta.__class__.__name__
         )
 
     @classmethod
