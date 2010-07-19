@@ -143,8 +143,10 @@ class FloatField(FakeField):
 
 class IntegerField(FakeField):
     def get_random_value(self, lower=None, upper=None):
-        if not (lower and upper):
-            lower, upper = -1000, 1000
+        if not lower:
+            lower = -1000
+        if not upper:
+            upper = 1000
         return random.randint(lower, upper)
 
 
