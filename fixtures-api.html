@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The FakeModel API &mdash; Poseur v0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Poseur v0 documentation" href="index.html" />
+    <link rel="next" title="Creating your own FakeFields" href="fixtures-fakefields.html" />
+    <link rel="prev" title="Generating fixtures" href="fixtures-overview.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="fixtures-fakefields.html" title="Creating your own FakeFields"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fixtures-overview.html" title="Generating fixtures"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-fakemodel-api">
+<h1>The <tt class="docutils literal"><span class="pre">FakeModel</span></tt> API<a class="headerlink" href="#the-fakemodel-api" title="Permalink to this headline">¶</a></h1>
+<p>Poseur generates data using <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclasses (<tt class="docutils literal"><span class="pre">from</span> <span class="pre">poseur.fixtures</span> <span class="pre">import</span> <span class="pre">FakeModel</span></tt>) that declare an inner <tt class="docutils literal"><span class="pre">Meta</span></tt> class that connects the sublass to a Django model and optionally declare field attributes that act as templates for mapping data to the model&#8217;s fields.</p>
+<div class="section" id="field-options">
+<h2>Field options<a class="headerlink" href="#field-options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="default-behavior">
+<h3>Default behavior<a class="headerlink" href="#default-behavior" title="Permalink to this headline">¶</a></h3>
+<p>Poseur defines <tt class="docutils literal"><span class="pre">FakeField</span></tt> subclasses for nearly all Django&#8217;s built-in model fields.  (Currently absent are <tt class="docutils literal"><span class="pre">FilePathField</span></tt>, <tt class="docutils literal"><span class="pre">FileField</span></tt> and <tt class="docutils literal"><span class="pre">ImageField</span></tt>, <tt class="docutils literal"><span class="pre">ManyToManyField</span></tt>, and <tt class="docutils literal"><span class="pre">XMLField</span></tt>.)  These classes have 1-to-1 name mappings with their model field counterparts.  When poseur encounters a model field, it checks <tt class="docutils literal"><span class="pre">poseur.fixtures.fields</span></tt> for a class with a matching name.  Failing this, it calls <tt class="docutils literal"><span class="pre">get_internal_type</span></tt> on the model field and again checks for a match. If there is no match, it will raise a <tt class="docutils literal"><span class="pre">FakeFieldNotFound</span></tt> error.</p>
+</div>
+<div class="section" id="providing-more-specific-values">
+<h3>Providing (more) specific values<a class="headerlink" href="#providing-more-specific-values" title="Permalink to this headline">¶</a></h3>
+<p>To provide a non-random or less random value for a field, declare that field&#8217;s name as an attribute on the <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclass.  The value of that attribute may be any of the following:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">str</span></tt> or <tt class="docutils literal"><span class="pre">unicode</span></tt> value</dt>
+<dd>The value will be used for each instance generated for the model concerned.</dd>
+<dt>list</dt>
+<dd>An element will be randomly selected from the list for each instance generated.</dd>
+<dt>2-tuple</dt>
+<dd>The first and second member of the tuple will be treated as lower and upper bounds for the range in which the randomly generated value must fall.  This applies to <tt class="docutils literal"><span class="pre">DateField</span></tt>, <tt class="docutils literal"><span class="pre">DateTimeField</span></tt>, <tt class="docutils literal"><span class="pre">TimeField</span></tt>, <tt class="docutils literal"><span class="pre">IntegerField</span></tt>, <tt class="docutils literal"><span class="pre">PositiveIntegerField</span></tt>, <tt class="docutils literal"><span class="pre">SmallIntegerField</span></tt>, <tt class="docutils literal"><span class="pre">PositiveSmallIntegerField</span></tt>, <tt class="docutils literal"><span class="pre">BigIntegerField</span></tt>, <tt class="docutils literal"><span class="pre">FloatField</span></tt>, and <tt class="docutils literal"><span class="pre">DecimalField</span></tt>.  If a tuple is given for any other field type, it will simply be ignore and poseur will fall back to the default behavior.</dd>
+<dt>callable</dt>
+<dd>The callable will be called for instance generated.  The functions exposed by <tt class="docutils literal"><span class="pre">faker</span></tt> are particularly useful here.</dd>
+<dt>dictionary (<tt class="docutils literal"><span class="pre">ForeignKey</span></tt> fields only)</dt>
+<dd>The dictionary will be passed as keyword arguments to the <tt class="docutils literal"><span class="pre">filter</span></tt> method on the model&#8217;s default manager.  If there is more than one object in the queryset, one will be selected at random.</dd>
+<dt><tt class="docutils literal"><span class="pre">FakeField</span></tt> subclass</dt>
+<dd>You can write your own <tt class="docutils literal"><span class="pre">FakeField</span></tt>s if the default behavior or the options above do not meet your needs.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="meta-options">
+<h2><tt class="docutils literal"><span class="pre">Meta</span></tt> options<a class="headerlink" href="#meta-options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="required-attributes">
+<h3>Required attributes<a class="headerlink" href="#required-attributes" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">model</span></tt></dt>
+<dd>The model class that you want to generate data for with this <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclass.</dd>
+<dt><tt class="docutils literal"><span class="pre">count</span></tt></dt>
+<dd>The number of instances to generated by default.</dd>
+</dl>
+</div>
+<div class="section" id="optional-attributes">
+<h3>Optional attributes<a class="headerlink" href="#optional-attributes" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">requires</span></tt></dt>
+<dd>A list of tuples of other <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclasses that need to be generated first.  Currently these must be actual classes and not import paths.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is obeyed only by <tt class="docutils literal"><span class="pre">poseur.fixtures.load_fixtures</span></tt>.  Poseur assumes that if you are calling <tt class="docutils literal"><span class="pre">generate</span></tt> on a <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclass, then you have opted to do things manually.</p>
+</div>
+</div>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="classmethod">
+<dt id="generate">
+<em class="property">classmethod </em><tt class="descname">generate</tt><big>(</big><span class="optional">[</span><em>count=None</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#generate" title="Permalink to this definition">¶</a></dt>
+<dd>Generates <em>count</em> instances of the model.  If no arguments are provided, defaults to the <tt class="docutils literal"><span class="pre">count</span></tt> attribute of the inner <tt class="docutils literal"><span class="pre">Meta</span></tt> class.</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">The <tt class="docutils literal"><span class="pre">FakeModel</span></tt> API</a><ul>
+<li><a class="reference external" href="#field-options">Field options</a><ul>
+<li><a class="reference external" href="#default-behavior">Default behavior</a></li>
+<li><a class="reference external" href="#providing-more-specific-values">Providing (more) specific values</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#meta-options"><tt class="docutils literal"><span class="pre">Meta</span></tt> options</a><ul>
+<li><a class="reference external" href="#required-attributes">Required attributes</a></li>
+<li><a class="reference external" href="#optional-attributes">Optional attributes</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fixtures-overview.html"
+                                  title="previous chapter">Generating fixtures</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fixtures-fakefields.html"
+                                  title="next chapter">Creating your own <tt class="docutils literal"><span class="pre">FakeField</span></tt>s</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fixtures-api.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="fixtures-fakefields.html" title="Creating your own FakeFields"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fixtures-overview.html" title="Generating fixtures"
+             >previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan Lukens.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.7.
+    </div>
+  </body>
+</html>

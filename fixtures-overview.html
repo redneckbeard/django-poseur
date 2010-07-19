@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Generating fixtures &mdash; Poseur v0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Poseur v0 documentation" href="index.html" />
+    <link rel="next" title="The FakeModel API" href="fixtures-api.html" />
+    <link rel="prev" title="django-poseur documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="fixtures-api.html" title="The FakeModel API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="django-poseur documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="generating-fixtures">
+<h1>Generating fixtures<a class="headerlink" href="#generating-fixtures" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Assume that we have a model that looks something like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">birthday</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you want to use poseur to create a bunch of instances of this model, you create a <tt class="docutils literal"><span class="pre">poseur.fixtures.FakeModel</span></tt> subclass.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># fixtures.py</span>
+
+<span class="k">class</span> <span class="nc">FakePerson</span><span class="p">(</span><span class="n">FakeModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>This is the simplest possible case.  The inner <tt class="docutils literal"><span class="pre">Meta</span></tt> class requires that you define a model and a count (the number of instances that will be generated in one pass).  Everything else is optional.  Poseur will generate random values for all the declared fields for each instance. However, it&#8217;s possible that we may want to be a bit more specific.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FakePerson</span><span class="p">(</span><span class="n">FakeModel</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">faker</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first_name</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="s">&quot;Johnson&quot;</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;100.00&quot;</span><span class="p">,</span> <span class="s">&quot;200.00&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>Let&#8217;s take a look at what&#8217;s happening here.</p>
+<ul class="simple">
+<li>We are providing a value for <tt class="docutils literal"><span class="pre">first_name</span></tt> with a callable.  <tt class="docutils literal"><span class="pre">faker.name.first_name</span></tt> will get called every time an instance is created.</li>
+<li>We are supplying a string literal for <tt class="docutils literal"><span class="pre">last_name</span></tt>, which will be used for all instances created.</li>
+<li>We are using a tuple for <tt class="docutils literal"><span class="pre">weight</span></tt>, which indicates to poseur the upper and lower bounds for random value generation.</li>
+<li>We are still leaving the value of <tt class="docutils literal"><span class="pre">birthday</span></tt> entirely up to poseur.</li>
+</ul>
+<p>Now that we have a <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclass, we have two options for creating our data:</p>
+<ul>
+<li><p class="first">Passing the import path to the <tt class="docutils literal"><span class="pre">fixtures</span></tt> module to <tt class="docutils literal"><span class="pre">poseur.fixtures.load_fixtures</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">poseur.fixtures</span> <span class="kn">import</span> <span class="n">load_fixtures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_fixtures</span><span class="p">(</span><span class="s">&#39;myapp.fixtures&#39;</span><span class="p">)</span>
+<span class="go">10 instances of `Foo&#39; generated.</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Calling <tt class="docutils literal"><span class="pre">generate</span></tt> on a <tt class="docutils literal"><span class="pre">FakeModel</span></tt> subclass.  Generate takes one argument, <tt class="docutils literal"><span class="pre">count</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">FakePerson</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">5 instances of `Foo&#39; generated.</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>You can use these methods in a <tt class="docutils literal"><span class="pre">setUp</span></tt> method for your test suite, or you can just run them or dump the data to JSON.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Generating fixtures</a><ul>
+<li><a class="reference external" href="#getting-started">Getting started</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">django-poseur documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fixtures-api.html"
+                                  title="next chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">FakeModel</span></tt> API</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fixtures-overview.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="fixtures-api.html" title="The FakeModel API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="django-poseur documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan Lukens.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.7.
+    </div>
+  </body>
+</html>

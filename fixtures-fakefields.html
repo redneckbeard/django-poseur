@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating your own FakeFields &mdash; Poseur v0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Poseur v0 documentation" href="index.html" />
+    <link rel="next" title="Wish list" href="fixtures-todo.html" />
+    <link rel="prev" title="The FakeModel API" href="fixtures-api.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="fixtures-todo.html" title="Wish list"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fixtures-api.html" title="The FakeModel API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="creating-your-own-fakefields">
+<h1>Creating your own <tt class="docutils literal"><span class="pre">FakeField</span></tt>s<a class="headerlink" href="#creating-your-own-fakefields" title="Permalink to this headline">¶</a></h1>
+<p>If you have a custom field that you don&#8217;t want to use the behavior of <tt class="docutils literal"><span class="pre">get_internal_type</span></tt>, you can easily write a <tt class="docutils literal"><span class="pre">FakeField</span></tt> subclass to do the job.  Here&#8217;s an example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">faker</span>
+<span class="kn">from</span> <span class="nn">poseur.fixtures</span> <span class="kn">import</span> <span class="n">FakeField</span>
+
+<span class="k">class</span> <span class="nc">FakeUSPhoneField</span><span class="p">(</span><span class="n">FakeField</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_random_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">faker</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">numerify</span><span class="p">(</span><span class="s">&quot;###-###-####&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As you can see, there are only two steps:</p>
+<ol class="arabic simple">
+<li>Subclass <tt class="docutils literal"><span class="pre">FakeField</span></tt>;</li>
+<li>Override the instance method <tt class="docutils literal"><span class="pre">get_random_value</span></tt>.  Not doing so will result in an <tt class="docutils literal"><span class="pre">NotImplementedError</span></tt> being raised.</li>
+</ol>
+<dl class="method">
+<dt id="get_random_value">
+<tt class="descname">get_random_value</tt><big>(</big><em>self</em>, <em>lower=None</em>, <em>upper=None</em><big>)</big><a class="headerlink" href="#get_random_value" title="Permalink to this definition">¶</a></dt>
+<dd>Should return a random value that validates for this field type.  The parameters <tt class="docutils literal"><span class="pre">lower</span></tt> and <tt class="docutils literal"><span class="pre">upper</span></tt> only apply to field types where a range can sensibly be implemented (numeric types, date-based types, possibly a field that pulls from a finite list of words in alphabetically order, etc.).  If these don&#8217;t make sense for your field, it&#8217;s safe to ignore them.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fixtures-api.html"
+                                  title="previous chapter">The <tt class="docutils literal docutils literal"><span class="pre">FakeModel</span></tt> API</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fixtures-todo.html"
+                                  title="next chapter">Wish list</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fixtures-fakefields.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="fixtures-todo.html" title="Wish list"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fixtures-api.html" title="The FakeModel API"
+             >previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan Lukens.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.7.
+    </div>
+  </body>
+</html>

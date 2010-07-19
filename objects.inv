@@ -1,0 +1,5 @@
+# Sphinx inventory version 1
+# Project: Poseur
+# Version: 0.1
+get_random_value method fixtures-fakefields.html
+generate classmethod fixtures-api.html

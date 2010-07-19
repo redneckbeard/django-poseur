@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Wish list &mdash; Poseur v0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Poseur v0 documentation" href="index.html" />
+    <link rel="next" title="Template access to faker" href="templatetags.html" />
+    <link rel="prev" title="Creating your own FakeFields" href="fixtures-fakefields.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templatetags.html" title="Template access to faker"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fixtures-fakefields.html" title="Creating your own FakeFields"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="wish-list">
+<h1>Wish list<a class="headerlink" href="#wish-list" title="Permalink to this headline">¶</a></h1>
+<p>Poseur is currently very much alpha software.  It pretty much does all of what I need it to do, but I recognize that&#8217;s probably not enough for a lot of people.  Here are a few items that have crossed my mind:</p>
+<ul class="simple">
+<li>Provide some sort of option in the <tt class="docutils literal"><span class="pre">Meta</span></tt> class for models with foreign key relationships that will evenly distribute the relations among the available objects (cycling through them rather than randomly selecting them each time)</li>
+<li>Provide a &#8220;best-guess&#8221; mechanism for dealing with the wealth of fields in <tt class="docutils literal"><span class="pre">django.contrib.localflavor</span></tt>.  I guess this would involve writing something that would parse a regular expression and simplify it down to something that could be fed to <tt class="docutils literal"><span class="pre">faker.utils.bothify</span></tt>.  The caveat here is that it would only work for those fields that are subclasses of <tt class="docutils literal"><span class="pre">RegexField</span></tt>, but if done right it could ease the pain of defining values for a good number of these fields.</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fixtures-fakefields.html"
+                                  title="previous chapter">Creating your own <tt class="docutils literal docutils literal docutils literal"><span class="pre">FakeField</span></tt>s</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="templatetags.html"
+                                  title="next chapter">Template access to faker</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fixtures-todo.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="templatetags.html" title="Template access to faker"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fixtures-fakefields.html" title="Creating your own FakeFields"
+             >previous</a> |</li>
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan Lukens.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.7.
+    </div>
+  </body>
+</html>
