@@ -54,6 +54,11 @@ class ForeignKey(FakeField):
         return self._get_random_instance(self.related_model.objects.all())
 
 
+class BooleanField(FakeField):
+    def get_random_value(self, lower=None, upper=None):
+        return random.choice([True, False])
+
+
 class CharField(FakeField):
     def get_random_value(self, lower=None, upper=None):
         words = lorem.sentence()
