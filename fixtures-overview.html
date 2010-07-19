@@ -5,13 +5,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Generating fixtures &mdash; Poseur v0.1.0 documentation</title>
+    <title>Generating fixtures &mdash; Poseur v0 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1.0',
+        VERSION:     '0',
         COLLAPSE_MODINDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -19,7 +19,7 @@
     </script>
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Poseur v0.1.0 documentation" href="index.html" />
+    <link rel="top" title="Poseur v0 documentation" href="index.html" />
     <link rel="next" title="The FakeModel API" href="fixtures-api.html" />
     <link rel="prev" title="django-poseur documentation" href="index.html" /> 
   </head>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="index.html" title="django-poseur documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Poseur v0.1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -62,7 +62,7 @@
 
 <span class="k">class</span> <span class="nc">FakePerson</span><span class="p">(</span><span class="n">FakeModel</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Person</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
 </pre></div>
 </div>
@@ -79,7 +79,7 @@
 </div>
 <p>Let&#8217;s take a look at what&#8217;s happening here.</p>
 <ul class="simple">
-<li>We are providing a value for <tt class="docutils literal"><span class="pre">first_name</span></tt> with a callable.  <tt class="docutils literal"><span class="pre">faker.name.first_name</span></tt> will get called every time an instance is created.</li>
+<li>We are providing a value for <tt class="docutils literal"><span class="pre">first_name</span></tt> with a callable.  <tt class="docutils literal"><span class="pre">faker.name.first_name</span></tt> will get called every time an instance is created.  (faker is the underlying library for much of what poseur does, and its functions are particularly useful here.)</li>
 <li>We are supplying a string literal for <tt class="docutils literal"><span class="pre">last_name</span></tt>, which will be used for all instances created.</li>
 <li>We are using a tuple for <tt class="docutils literal"><span class="pre">weight</span></tt>, which indicates to poseur the upper and lower bounds for random value generation.</li>
 <li>We are still leaving the value of <tt class="docutils literal"><span class="pre">birthday</span></tt> entirely up to poseur.</li>
@@ -158,7 +158,7 @@
         <li class="right" >
           <a href="index.html" title="django-poseur documentation"
              >previous</a> |</li>
-        <li><a href="index.html">Poseur v0.1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Poseur v0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
