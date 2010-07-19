@@ -45,6 +45,11 @@ class BaseFakeModel(object):
             count = cls._meta.count
         for i in range(count):
             cls._meta.model.objects.create(**cls._get_kwargs())
+        print "%d instance%s of `%s' generated." % (
+            count,
+            '' if count == 1 else 's',
+            cls._meta.model.__class__.__name__
+        )
 
     @classmethod
     def _get_kwargs(cls):
