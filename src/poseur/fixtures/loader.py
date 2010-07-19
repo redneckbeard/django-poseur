@@ -1,7 +1,7 @@
 import inspect 
 
 from django.utils.importlib import import_module
-from faker.fixtures import FakeModel
+from poseur.fixtures import FakeModel
 
 
 def _get_unmet_dependency(faker, faked):

@@ -1,6 +1,6 @@
 import inspect
 
-from faker.fixtures import fields
+from poseur.fixtures import fields
 
 
 class FakeFieldNotFound(Exception):
