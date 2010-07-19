@@ -40,6 +40,10 @@ class ForeignKey(FakeField):
     def _get_random_instance(self, queryset):
         count = queryset.count()
         if count == 0:
+            if self.field_instance.null:
+                return None
+            raise self.related_model.DoesNotExist
+        if count == 1:
             return queryset[0]
         return queryset[random.randint(0, count-1)]
 

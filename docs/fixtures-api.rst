@@ -12,6 +12,8 @@ Default behavior
 
 Poseur defines ``FakeField`` subclasses for nearly all Django's built-in model fields.  (Currently absent are ``FilePathField``, ``FileField`` and ``ImageField``, ``ManyToManyField``, and ``XMLField``.)  These classes have 1-to-1 name mappings with their model field counterparts.  When poseur encounters a model field, it checks ``poseur.fixtures.fields`` for a class with a matching name.  Failing this, it calls ``get_internal_type`` on the model field and again checks for a match. If there is no match, it will raise a ``FakeFieldNotFound`` error.
 
+Special handling is provided for foreign key fields.  An instance will be selected from all the records available for the related model.  If there are no instances and the field is nullable, the attribute is passed ``None``; otherwise that model's ``DoesNotExist`` will be raised.
+
 Providing (more) specific values
 --------------------------------
 
