@@ -6,7 +6,7 @@
 django-poseur documentation
 ===========================
 
-Poseur is a set of Django utilities built around python-faker.  It provides facilities for generating fixtures, using faker to fill in the fields you don't care about with random dat, and for accessing faker in Django templates.
+Poseur is a set of Django utilities built around python-faker (and thus python-faker is a dependency).  It provides facilities for generating fixtures, using faker to fill in the fields you don't care about with random data, and for accessing faker in Django templates.
 
 Contents:
 

@@ -20,7 +20,7 @@ If you want to use poseur to create a bunch of instances of this model, you crea
 
     class FakePerson(FakeModel):
         class Meta:
-            model = Foo
+            model = Person
             count = 10
 
 This is the simplest possible case.  The inner ``Meta`` class requires that you define a model and a count (the number of instances that will be generated in one pass).  Everything else is optional.  Poseur will generate random values for all the declared fields for each instance. However, it's possible that we may want to be a bit more specific.
@@ -38,7 +38,7 @@ This is the simplest possible case.  The inner ``Meta`` class requires that you 
 
 Let's take a look at what's happening here.
 
-- We are providing a value for ``first_name`` with a callable.  ``faker.name.first_name`` will get called every time an instance is created.
+- We are providing a value for ``first_name`` with a callable.  ``faker.name.first_name`` will get called every time an instance is created.  (faker is the underlying library for much of what poseur does, and its functions are particularly useful here.)
 - We are supplying a string literal for ``last_name``, which will be used for all instances created.
 - We are using a tuple for ``weight``, which indicates to poseur the upper and lower bounds for random value generation.
 - We are still leaving the value of ``birthday`` entirely up to poseur.
