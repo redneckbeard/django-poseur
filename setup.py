@@ -11,4 +11,9 @@ setup(
     packages = find_packages('src'),
     package_dir = {'': 'src'},
     install_requires = ['setuptools', 'python-faker'],
+    entry_points={
+        'nose.plugins.0.10': [
+            'poseur_fixtures = poseur.fixtures.plugins:PoseurFixturesPlugin',
+        ]
+    }
 )
